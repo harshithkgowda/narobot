@@ -98,29 +98,29 @@ body {
 
 .nav-item {
   @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200;
-  @apply text-black dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700;
+  @apply text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700;
 }
 
 .nav-item.active {
-  @apply bg-gray-50 dark:bg-gray-700 text-black dark:text-white font-medium;
-  @apply border border-gray-100 dark:border-gray-600;
+  @apply bg-gray-100 dark:bg-gray-700 text-black dark:text-white font-medium;
+  @apply border border-gray-200 dark:border-gray-600;
 }
 
 .conversation-item {
   @apply p-3 rounded-lg cursor-pointer transition-all duration-200;
-  @apply hover:bg-gray-50 dark:hover:bg-gray-700;
+  @apply hover:bg-gray-100 dark:hover:bg-gray-700;
 }
 
 /* Header */
 .header-bar {
-  @apply px-4 py-3 border-b border-gray-100 dark:border-gray-700;
+  @apply px-4 py-3 border-b border-gray-200 dark:border-gray-700;
   @apply bg-white dark:bg-gray-900/80 backdrop-blur-sm;
 }
 
 .icon-button {
   @apply p-2 rounded-lg transition-all duration-200;
-  @apply hover:bg-gray-50 dark:hover:bg-gray-800;
-  @apply text-black dark:text-gray-400 hover:text-black dark:hover:text-white;
+  @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+  @apply text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white;
 }
 
 /* Messages */
@@ -153,11 +153,11 @@ body {
 }
 
 .message-time {
-  @apply text-xs text-gray-400 dark:text-gray-400;
+  @apply text-xs text-gray-500 dark:text-gray-400;
 }
 
 .message-text {
-  @apply text-black dark:text-white leading-relaxed;
+  @apply text-gray-900 dark:text-white leading-relaxed;
 }
 
 .message-user .message-text {
@@ -170,13 +170,13 @@ body {
 
 .action-button {
   @apply p-1.5 rounded-lg transition-all duration-200;
-  @apply hover:bg-gray-50 dark:hover:bg-gray-800;
-  @apply text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-gray-300;
+  @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+  @apply text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-300;
 }
 
 /* Thinking indicator */
 .thinking-indicator {
-  @apply flex items-center gap-2 text-gray-500 dark:text-gray-400;
+  @apply flex items-center gap-2 text-gray-600 dark:text-gray-400;
 }
 
 .thinking-dots {
@@ -184,7 +184,7 @@ body {
 }
 
 .thinking-dot {
-  @apply w-1 h-1 bg-gray-400 dark:bg-gray-500 rounded-full;
+  @apply w-1 h-1 bg-gray-500 dark:bg-gray-500 rounded-full;
   animation: thinking 1.4s infinite ease-in-out;
 }
 
@@ -194,7 +194,7 @@ body {
 
 /* Input */
 .input-container {
-  @apply border-t border-gray-100 dark:border-gray-700;
+  @apply border-t border-gray-200 dark:border-gray-700;
   @apply bg-white dark:bg-gray-900/80 backdrop-blur-sm;
 }
 
@@ -202,20 +202,20 @@ body {
   @apply relative flex items-center;
   @apply bg-gray-50 dark:bg-gray-800 rounded-2xl;
   @apply border border-gray-200 dark:border-gray-700;
-  @apply focus-within:border-black dark:focus-within:border-white;
+  @apply focus-within:border-gray-400 dark:focus-within:border-white;
   @apply transition-all duration-200;
 }
 
 .input-attachment-button {
-  @apply p-3 text-gray-400 dark:text-gray-400;
-  @apply hover:text-black dark:hover:text-gray-300;
+  @apply p-3 text-gray-500 dark:text-gray-400;
+  @apply hover:text-gray-700 dark:hover:text-gray-300;
   @apply transition-colors duration-200;
 }
 
 .chat-input {
   @apply flex-1 bg-transparent border-none outline-none;
-  @apply px-2 py-3 text-black dark:text-white;
-  @apply placeholder-gray-400 dark:placeholder-gray-400;
+  @apply px-2 py-3 text-gray-900 dark:text-white;
+  @apply placeholder-gray-500 dark:placeholder-gray-400;
   @apply resize-none;
 }
 
@@ -225,8 +225,8 @@ body {
 
 .input-action-button {
   @apply p-2 rounded-lg transition-all duration-200;
-  @apply text-gray-400 dark:text-gray-400;
-  @apply hover:text-black dark:hover:text-gray-300;
+  @apply text-gray-500 dark:text-gray-400;
+  @apply hover:text-gray-700 dark:hover:text-gray-300;
   @apply hover:bg-gray-100 dark:hover:bg-gray-700;
 }
 
@@ -244,7 +244,7 @@ body {
 
 /* Suggestion cards */
 .suggestion-card {
-  @apply p-4 rounded-xl border border-gray-100 dark:border-gray-700;
+  @apply p-4 rounded-xl border border-gray-200 dark:border-gray-700;
   @apply bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700;
   @apply transition-all duration-200 hover:scale-[1.02] hover:shadow-lg;
   @apply text-left;
@@ -252,12 +252,12 @@ body {
 
 /* Slideshow enhancements */
 .slideshow-container {
-  @apply bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700;
+  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700;
   @apply rounded-xl overflow-hidden shadow-lg;
 }
 
 .slide-progress {
-  @apply bg-gray-100 dark:bg-gray-700 h-1;
+  @apply bg-gray-200 dark:bg-gray-700 h-1;
 }
 
 .slide-progress-fill {
@@ -265,8 +265,8 @@ body {
 }
 
 .keyword-tag {
-  @apply bg-gray-50 dark:bg-gray-700 text-black dark:text-gray-300;
-  @apply border border-gray-100 dark:border-gray-600;
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300;
+  @apply border border-gray-200 dark:border-gray-600;
   @apply px-3 py-1 rounded-full text-xs font-medium;
 }
 
@@ -296,7 +296,7 @@ body {
 }
 
 .input-wrapper:focus-within {
-  @apply ring-2 ring-black/20 dark:ring-white/20;
+  @apply ring-2 ring-gray-300 dark:ring-white/20;
 }
 
 /* Hover effects */
@@ -334,21 +334,21 @@ body {
 
 /* Button hover states for light mode */
 .icon-button:hover {
-  @apply bg-gray-50 dark:bg-gray-800;
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 /* Enhanced contrast for light mode */
 .nav-item {
-  @apply text-black dark:text-gray-300;
+  @apply text-gray-700 dark:text-gray-300;
 }
 
 .nav-item:hover {
-  @apply text-black dark:text-white bg-gray-50 dark:bg-gray-700;
+  @apply text-black dark:text-white bg-gray-100 dark:bg-gray-700;
 }
 
 /* Better visual hierarchy */
 .message-header span:first-child {
-  @apply text-black dark:text-white font-medium;
+  @apply text-gray-900 dark:text-white font-medium;
 }
 
 /* Improved borders and shadows */
@@ -362,4 +362,95 @@ body {
 
 .suggestion-card {
   @apply shadow-sm hover:shadow-lg;
+}
+
+/* Light mode specific overrides */
+body:not(.dark) {
+  background-color: #ffffff;
+}
+
+body:not(.dark) .sidebar-container > div {
+  @apply bg-white border-gray-200;
+}
+
+body:not(.dark) .header-bar {
+  @apply bg-white border-gray-200;
+}
+
+body:not(.dark) .input-container {
+  @apply bg-white border-gray-200;
+}
+
+/* Welcome section styling for light mode */
+body:not(.dark) .text-center h2 {
+  @apply text-gray-900;
+}
+
+body:not(.dark) .text-center p {
+  @apply text-gray-600;
+}
+
+/* Ensure proper text colors in light mode */
+body:not(.dark) .nav-item {
+  @apply text-gray-700;
+}
+
+body:not(.dark) .nav-item.active {
+  @apply text-black bg-gray-100 border-gray-200;
+}
+
+body:not(.dark) .conversation-item {
+  @apply text-gray-700;
+}
+
+body:not(.dark) .conversation-item h4 {
+  @apply text-black;
+}
+
+body:not(.dark) .conversation-item p {
+  @apply text-gray-500;
+}
+
+/* Input styling for light mode */
+body:not(.dark) .input-wrapper {
+  @apply bg-gray-50 border-gray-200;
+}
+
+body:not(.dark) .chat-input {
+  @apply text-gray-900 placeholder-gray-500;
+}
+
+body:not(.dark) .input-attachment-button {
+  @apply text-gray-500;
+}
+
+body:not(.dark) .input-action-button {
+  @apply text-gray-500;
+}
+
+/* Message styling for light mode */
+body:not(.dark) .message-text {
+  @apply text-gray-900;
+}
+
+body:not(.dark) .message-header span:first-child {
+  @apply text-gray-900;
+}
+
+body:not(.dark) .message-time {
+  @apply text-gray-500;
+}
+
+body:not(.dark) .thinking-indicator {
+  @apply text-gray-600;
+}
+
+/* Icon button styling for light mode */
+body:not(.dark) .icon-button {
+  @apply text-gray-600 hover:text-black hover:bg-gray-100;
+}
+
+/* Action button styling for light mode */
+body:not(.dark) .action-button {
+  @apply text-gray-500 hover:text-black hover:bg-gray-100;
 }
