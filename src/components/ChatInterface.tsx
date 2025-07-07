@@ -136,18 +136,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
 
   return (
     <div className={`flex h-screen ${darkMode ? 'dark' : ''}`}>
-      <div className="flex h-full w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+      <div className="flex h-full w-full bg-white dark:bg-gray-900 text-black dark:text-white">
         {/* Sidebar */}
         <div className={`sidebar-container ${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 ease-in-out overflow-hidden flex-shrink-0`}>
-          <div className="h-full bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+          <div className="h-full bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 flex flex-col">
             {/* Sidebar Header */}
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-4 border-b border-gray-100 dark:border-gray-700">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center shadow-lg">
                   <Bot className="w-5 h-5 text-white dark:text-black" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Narobot</h1>
+                  <h1 className="text-lg font-semibold text-black dark:text-white">Narobot</h1>
                   <p className="text-xs text-gray-500 dark:text-gray-400">AI Assistant</p>
                 </div>
               </div>
@@ -176,7 +176,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Conversations</span>
-                <span className="ml-auto text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">
+                <span className="ml-auto text-xs bg-gray-100 dark:bg-gray-700 text-black dark:text-gray-200 px-2 py-1 rounded-full">
                   {conversations.length}
                 </span>
               </div>
@@ -219,21 +219,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                             >
                               <Star className="w-3 h-3" fill={conv.starred ? 'currentColor' : 'none'} />
                             </button>
-                            <h4 className="text-sm font-medium truncate text-gray-900 dark:text-white">{conv.title}</h4>
+                            <h4 className="text-sm font-medium truncate text-black dark:text-white">{conv.title}</h4>
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">{conv.subtitle}</p>
                           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{conv.time}</p>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                           <button 
-                            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                            className="p-1 hover:bg-gray-50 dark:hover:bg-gray-600 rounded"
                             title="Edit"
                           >
                             <Edit3 className="w-3 h-3 text-gray-400" />
                           </button>
                           <button 
                             onClick={() => handleDeleteConversation(conv.id)}
-                            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                            className="p-1 hover:bg-gray-50 dark:hover:bg-gray-600 rounded"
                             title="Delete"
                           >
                             <Trash2 className="w-3 h-3 text-gray-400 hover:text-red-500" />
@@ -256,7 +256,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 >
                   {sidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
                 </button>
@@ -266,7 +266,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                     <Bot className="w-5 h-5 text-white dark:text-black" />
                   </div>
                   <div>
-                    <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Narobot</h1>
+                    <h1 className="text-lg font-semibold text-black dark:text-white">Narobot</h1>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500 dark:text-gray-400">⚡ Powered by Gemini 1.5 Flash</span>
                     </div>
@@ -305,7 +305,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                     <Bot className="w-8 h-8 text-white dark:text-black" />
                   </div>
                   
-                  <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Welcome to Narobot</h2>
+                  <h2 className="text-3xl font-bold mb-4 text-black dark:text-white">Welcome to Narobot</h2>
                   <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
                     Get intelligent assistance for your work, research, and creative projects. Ask questions, analyze data, or brainstorm ideas.
                   </p>
@@ -320,7 +320,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                       >
                         <div className="flex items-center gap-3 mb-2">
                           <span className="text-2xl">{prompt.icon}</span>
-                          <span className="font-medium text-gray-900 dark:text-white">{prompt.text}</span>
+                          <span className="font-medium text-black dark:text-white">{prompt.text}</span>
                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-400 text-left">
                           {prompt.description}
@@ -348,7 +348,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                     
                     <div className="message-content">
                       <div className="message-header">
-                        <span className="font-medium text-gray-900 dark:text-white">
+                        <span className="font-medium text-black dark:text-white">
                           {message.type === 'user' ? 'You' : 'Narobot'}
                         </span>
                         <span className="message-time">
@@ -402,7 +402,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                     
                     <div className="message-content">
                       <div className="message-header">
-                        <span className="font-medium text-gray-900 dark:text-white">Narobot</span>
+                        <span className="font-medium text-black dark:text-white">Narobot</span>
                         <span className="message-time">now</span>
                       </div>
                       
