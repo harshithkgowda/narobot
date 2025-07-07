@@ -36,7 +36,7 @@ interface ChatInterfaceProps {
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMessage, isLoading }) => {
   const [inputText, setInputText] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // Keep dark mode functionality but default to light
   const [conversations, setConversations] = useState([
     {
       id: 1,
@@ -84,6 +84,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
     window.location.reload();
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   const handleStarConversation = (id: number) => {
     setConversations(prev => 
       prev.map(conv => 
@@ -105,10 +109,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
     const url = window.location.href;
     navigator.clipboard.writeText(url);
     // You could add a toast notification here
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
   };
 
   const suggestedPrompts = [
@@ -143,8 +143,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
             {/* Sidebar Header */}
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
-                  <Bot className="w-5 h-5 text-white" />
+                <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center shadow-lg">
+                  <Bot className="w-5 h-5 text-white dark:text-black" />
                 </div>
                 <div>
                   <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Narobot</h1>
@@ -154,7 +154,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
               
               <button 
                 onClick={handleNewConversation}
-                className="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-indigo-500 dark:to-purple-500 dark:hover:from-indigo-600 dark:hover:to-purple-600 rounded-lg text-white text-sm font-medium transition-all duration-200 hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                className="w-full flex items-center gap-3 px-4 py-3 bg-black hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 rounded-lg text-white dark:text-black text-sm font-medium transition-all duration-200 hover:scale-[1.02] shadow-lg hover:shadow-xl"
               >
                 <Plus className="w-4 h-4" />
                 New Conversation
@@ -176,7 +176,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Conversations</span>
-                <span className="ml-auto text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full">
+                <span className="ml-auto text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">
                   {conversations.length}
                 </span>
               </div>
@@ -262,8 +262,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                 </button>
                 
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
-                    <Bot className="w-5 h-5 text-white" />
+                  <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center shadow-lg">
+                    <Bot className="w-5 h-5 text-white dark:text-black" />
                   </div>
                   <div>
                     <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Narobot</h1>
@@ -301,8 +301,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
             <div className="max-w-4xl mx-auto px-4 py-6">
               {messages.length === 0 && (
                 <div className="text-center py-16 animate-fade-in">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl">
-                    <Bot className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-black dark:bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+                    <Bot className="w-8 h-8 text-white dark:text-black" />
                   </div>
                   
                   <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Welcome to Narobot</h2>
@@ -340,8 +340,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                           <User className="w-4 h-4 text-white dark:text-gray-700" />
                         </div>
                       ) : (
-                        <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                          <Bot className="w-4 h-4 text-white" />
+                        <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center shadow-lg">
+                          <Bot className="w-4 h-4 text-white dark:text-black" />
                         </div>
                       )}
                     </div>
@@ -395,8 +395,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                 <div className="message-container">
                   <div className="message message-assistant">
                     <div className="message-avatar">
-                      <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                        <Bot className="w-4 h-4 text-white" />
+                      <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <Bot className="w-4 h-4 text-white dark:text-black" />
                       </div>
                     </div>
                     
