@@ -19,7 +19,10 @@ import {
   Home,
   ChevronLeft,
   Moon,
-  Sun
+  Sun,
+  Star,
+  Trash2,
+  Edit3
 } from 'lucide-react';
 import { ChatMessage } from '../types';
 import { SlideshowViewer } from './SlideshowViewer';
@@ -33,7 +36,31 @@ interface ChatInterfaceProps {
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMessage, isLoading }) => {
   const [inputText, setInputText] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false); // Default to light mode
+  const [conversations, setConversations] = useState([
+    {
+      id: 1,
+      title: "Project Requirements Analysis",
+      subtitle: "Let's analyze the technical requirements...",
+      time: "2 min ago",
+      starred: true
+    },
+    {
+      id: 2,
+      title: "Code Review Discussion", 
+      subtitle: "The implementation looks solid, but...",
+      time: "1 hour ago",
+      starred: false
+    },
+    {
+      id: 3,
+      title: "Database Design Planning",
+      subtitle: "We need to consider the schema...",
+      time: "3 hours ago",
+      starred: false
+    }
+  ]);
+  const [activeSection, setActiveSection] = useState('dashboard');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -50,6 +77,34 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
       onSendMessage(inputText.trim());
       setInputText('');
     }
+  };
+
+  const handleNewConversation = () => {
+    // Clear current messages and start fresh
+    window.location.reload();
+  };
+
+  const handleStarConversation = (id: number) => {
+    setConversations(prev => 
+      prev.map(conv => 
+        conv.id === id ? { ...conv, starred: !conv.starred } : conv
+      )
+    );
+  };
+
+  const handleDeleteConversation = (id: number) => {
+    setConversations(prev => prev.filter(conv => conv.id !== id));
+  };
+
+  const handleCopyMessage = (content: string) => {
+    navigator.clipboard.writeText(content);
+    // You could add a toast notification here
+  };
+
+  const handleShareConversation = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    // You could add a toast notification here
   };
 
   const suggestedPrompts = [
@@ -75,21 +130,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
     }
   ];
 
-  const recentConversations = [
-    {
-      title: "Project Requirements Analysis",
-      subtitle: "Let's analyze the technical requirements...",
-      time: "2 min ago",
-      starred: true
-    },
-    {
-      title: "Code Review Discussion", 
-      subtitle: "The implementation looks solid, but...",
-      time: "1 hour ago",
-      starred: false
-    }
-  ];
-
   return (
     <div className={`flex h-screen ${darkMode ? 'dark' : ''}`}>
       <div className="flex h-full w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
@@ -99,16 +139,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
             {/* Sidebar Header */}
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white dark:text-black" />
+                <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-semibold">Narobot</h1>
+                  <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Narobot</h1>
                   <p className="text-xs text-gray-500 dark:text-gray-400">AI Assistant</p>
                 </div>
               </div>
               
-              <button className="w-full flex items-center gap-3 px-4 py-3 bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 rounded-lg text-white dark:text-black text-sm font-medium transition-all duration-200 hover:scale-[1.02]">
+              <button 
+                onClick={handleNewConversation}
+                className="w-full flex items-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg text-white text-sm font-medium transition-all duration-200 hover:scale-[1.02]"
+              >
                 <Plus className="w-4 h-4" />
                 New Conversation
               </button>
@@ -116,24 +159,41 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
 
             {/* Navigation */}
             <div className="p-4 space-y-2">
-              <div className="nav-item active">
+              <div 
+                className={`nav-item ${activeSection === 'dashboard' ? 'active' : ''}`}
+                onClick={() => setActiveSection('dashboard')}
+              >
                 <Home className="w-4 h-4" />
                 <span>Dashboard</span>
               </div>
-              <div className="nav-item">
+              <div 
+                className={`nav-item ${activeSection === 'conversations' ? 'active' : ''}`}
+                onClick={() => setActiveSection('conversations')}
+              >
                 <MessageCircle className="w-4 h-4" />
                 <span>Conversations</span>
-                <span className="ml-auto text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">12</span>
+                <span className="ml-auto text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
+                  {conversations.length}
+                </span>
               </div>
-              <div className="nav-item">
+              <div 
+                className={`nav-item ${activeSection === 'assistant' ? 'active' : ''}`}
+                onClick={() => setActiveSection('assistant')}
+              >
                 <Bot className="w-4 h-4" />
                 <span>AI Assistant</span>
               </div>
-              <div className="nav-item">
+              <div 
+                className={`nav-item ${activeSection === 'archive' ? 'active' : ''}`}
+                onClick={() => setActiveSection('archive')}
+              >
                 <Archive className="w-4 h-4" />
                 <span>Archive</span>
               </div>
-              <div className="nav-item">
+              <div 
+                className={`nav-item ${activeSection === 'settings' ? 'active' : ''}`}
+                onClick={() => setActiveSection('settings')}
+              >
                 <Settings className="w-4 h-4" />
                 <span>Settings</span>
               </div>
@@ -144,20 +204,37 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
               <div className="mb-4">
                 <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Recent Conversations</h3>
                 <div className="space-y-2">
-                  {recentConversations.map((conv, index) => (
-                    <div key={index} className="conversation-item group">
+                  {conversations.map((conv) => (
+                    <div key={conv.id} className="conversation-item group">
                       <div className="flex items-start gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            {conv.starred && <span className="text-yellow-500">⭐</span>}
-                            <h4 className="text-sm font-medium truncate">{conv.title}</h4>
+                            <button
+                              onClick={() => handleStarConversation(conv.id)}
+                              className={`${conv.starred ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'} transition-colors`}
+                            >
+                              <Star className="w-3 h-3" fill={conv.starred ? 'currentColor' : 'none'} />
+                            </button>
+                            <h4 className="text-sm font-medium truncate text-gray-900 dark:text-white">{conv.title}</h4>
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">{conv.subtitle}</p>
                           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{conv.time}</p>
                         </div>
-                        <button className="opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MoreHorizontal className="w-4 h-4 text-gray-400" />
-                        </button>
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                          <button 
+                            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                            title="Edit"
+                          >
+                            <Edit3 className="w-3 h-3 text-gray-400" />
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteConversation(conv.id)}
+                            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3 h-3 text-gray-400 hover:text-red-500" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -181,11 +258,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                 </button>
                 
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-white dark:text-black" />
+                  <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+                    <Bot className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-lg font-semibold">Narobot</h1>
+                    <h1 className="text-lg font-semibold text-gray-900 dark:text-white">Narobot</h1>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500 dark:text-gray-400">⚡ Powered by Gemini 1.5 Flash</span>
                     </div>
@@ -197,13 +274,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                 <button 
                   onClick={() => setDarkMode(!darkMode)}
                   className="icon-button"
+                  title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                 >
                   {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                 </button>
-                <button className="icon-button">
+                <button 
+                  onClick={handleShareConversation}
+                  className="icon-button"
+                  title="Share conversation"
+                >
                   <Share className="w-4 h-4" />
                 </button>
-                <button className="icon-button">
+                <button className="icon-button" title="More options">
                   <MoreHorizontal className="w-4 h-4" />
                 </button>
               </div>
@@ -215,11 +297,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
             <div className="max-w-4xl mx-auto px-4 py-6">
               {messages.length === 0 && (
                 <div className="text-center py-16 animate-fade-in">
-                  <div className="w-16 h-16 bg-black dark:bg-white rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <Bot className="w-8 h-8 text-white dark:text-black" />
+                  <div className="w-16 h-16 bg-blue-600 dark:bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Bot className="w-8 h-8 text-white" />
                   </div>
                   
-                  <h2 className="text-3xl font-bold mb-4">Welcome to Narobot</h2>
+                  <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Welcome to Narobot</h2>
                   <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
                     Get intelligent assistance for your work, research, and creative projects. Ask questions, analyze data, or brainstorm ideas.
                   </p>
@@ -234,7 +316,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                       >
                         <div className="flex items-center gap-3 mb-2">
                           <span className="text-2xl">{prompt.icon}</span>
-                          <span className="font-medium">{prompt.text}</span>
+                          <span className="font-medium text-gray-900 dark:text-white">{prompt.text}</span>
                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-400 text-left">
                           {prompt.description}
@@ -250,19 +332,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                   <div className={`message ${message.type === 'user' ? 'message-user' : 'message-assistant'}`}>
                     <div className="message-avatar">
                       {message.type === 'user' ? (
-                        <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center">
-                          <User className="w-4 h-4 text-white dark:text-black" />
+                        <div className="w-8 h-8 bg-gray-700 dark:bg-gray-300 rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4 text-white dark:text-gray-700" />
                         </div>
                       ) : (
-                        <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center">
-                          <Bot className="w-4 h-4 text-white dark:text-black" />
+                        <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center">
+                          <Bot className="w-4 h-4 text-white" />
                         </div>
                       )}
                     </div>
                     
                     <div className="message-content">
                       <div className="message-header">
-                        <span className="font-medium">
+                        <span className="font-medium text-gray-900 dark:text-white">
                           {message.type === 'user' ? 'You' : 'Narobot'}
                         </span>
                         <span className="message-time">
@@ -282,16 +364,20 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                       
                       {message.type === 'bot' && !isLoading && (
                         <div className="message-actions">
-                          <button className="action-button">
+                          <button 
+                            onClick={() => handleCopyMessage(message.content)}
+                            className="action-button"
+                            title="Copy message"
+                          >
                             <Copy className="w-4 h-4" />
                           </button>
-                          <button className="action-button">
+                          <button className="action-button" title="Like">
                             <ThumbsUp className="w-4 h-4" />
                           </button>
-                          <button className="action-button">
+                          <button className="action-button" title="Dislike">
                             <ThumbsDown className="w-4 h-4" />
                           </button>
-                          <button className="action-button">
+                          <button className="action-button" title="Regenerate">
                             <RotateCcw className="w-4 h-4" />
                           </button>
                         </div>
@@ -305,14 +391,14 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                 <div className="message-container">
                   <div className="message message-assistant">
                     <div className="message-avatar">
-                      <div className="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center">
-                        <Bot className="w-4 h-4 text-white dark:text-black" />
+                      <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center">
+                        <Bot className="w-4 h-4 text-white" />
                       </div>
                     </div>
                     
                     <div className="message-content">
                       <div className="message-header">
-                        <span className="font-medium">Narobot</span>
+                        <span className="font-medium text-gray-900 dark:text-white">Narobot</span>
                         <span className="message-time">now</span>
                       </div>
                       
@@ -338,7 +424,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
             <div className="max-w-4xl mx-auto px-4 py-4">
               <form onSubmit={handleSubmit} className="relative">
                 <div className="input-wrapper">
-                  <button type="button" className="input-attachment-button">
+                  <button type="button" className="input-attachment-button" title="Attach file">
                     <Paperclip className="w-4 h-4" />
                   </button>
                   
@@ -352,7 +438,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                   />
                   
                   <div className="input-actions">
-                    <button type="button" className="input-action-button">
+                    <button type="button" className="input-action-button" title="Voice input">
                       <Mic className="w-4 h-4" />
                     </button>
                     
@@ -360,6 +446,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, onSendMe
                       type="submit"
                       disabled={!inputText.trim() || isLoading}
                       className="send-button"
+                      title="Send message"
                     >
                       {isLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin" />

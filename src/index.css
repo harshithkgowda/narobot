@@ -102,7 +102,8 @@ body {
 }
 
 .nav-item.active {
-  @apply bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-medium;
+  @apply bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium;
+  @apply border border-blue-200 dark:border-blue-700;
 }
 
 .conversation-item {
@@ -160,7 +161,7 @@ body {
 }
 
 .message-user .message-text {
-  @apply bg-black dark:bg-white text-white dark:text-black px-4 py-3 rounded-2xl rounded-tr-md inline-block max-w-fit ml-auto;
+  @apply bg-blue-600 dark:bg-blue-500 text-white px-4 py-3 rounded-2xl rounded-tr-md inline-block max-w-fit ml-auto;
 }
 
 .message-actions {
@@ -199,9 +200,9 @@ body {
 
 .input-wrapper {
   @apply relative flex items-center;
-  @apply bg-gray-100 dark:bg-gray-800 rounded-2xl;
+  @apply bg-gray-50 dark:bg-gray-800 rounded-2xl;
   @apply border border-gray-200 dark:border-gray-700;
-  @apply focus-within:border-gray-300 dark:focus-within:border-gray-600;
+  @apply focus-within:border-blue-300 dark:focus-within:border-blue-600;
   @apply transition-all duration-200;
 }
 
@@ -231,8 +232,8 @@ body {
 
 .send-button {
   @apply p-2 rounded-lg transition-all duration-200;
-  @apply bg-black dark:bg-white text-white dark:text-black;
-  @apply hover:bg-gray-800 dark:hover:bg-gray-100;
+  @apply bg-blue-600 dark:bg-blue-500 text-white;
+  @apply hover:bg-blue-700 dark:hover:bg-blue-600;
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
   @apply hover:scale-105 active:scale-95;
 }
@@ -260,7 +261,7 @@ body {
 }
 
 .slide-progress-fill {
-  @apply bg-black dark:bg-white h-full transition-all duration-300;
+  @apply bg-blue-600 dark:bg-blue-500 h-full transition-all duration-300;
 }
 
 .keyword-tag {
@@ -289,20 +290,13 @@ body {
   }
 }
 
-/* Dark mode improvements */
-@media (prefers-color-scheme: dark) {
-  .suggestion-card {
-    @apply bg-gray-800 border-gray-700 hover:bg-gray-700;
-  }
-}
-
 /* Focus states */
 .chat-input:focus {
   @apply outline-none;
 }
 
 .input-wrapper:focus-within {
-  @apply ring-2 ring-black/10 dark:ring-white/10;
+  @apply ring-2 ring-blue-500/20 dark:ring-blue-400/20;
 }
 
 /* Hover effects */
@@ -331,4 +325,41 @@ body {
 /* Professional spacing */
 .message-container:last-child {
   @apply mb-8;
+}
+
+/* Light mode specific improvements */
+.suggestion-card:hover {
+  @apply shadow-md;
+}
+
+/* Button hover states for light mode */
+.icon-button:hover {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+/* Enhanced contrast for light mode */
+.nav-item {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.nav-item:hover {
+  @apply text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700;
+}
+
+/* Better visual hierarchy */
+.message-header span:first-child {
+  @apply text-gray-900 dark:text-white font-medium;
+}
+
+/* Improved borders and shadows */
+.slideshow-container {
+  @apply shadow-lg dark:shadow-gray-900/20;
+}
+
+.input-wrapper {
+  @apply shadow-sm;
+}
+
+.suggestion-card {
+  @apply shadow-sm hover:shadow-md;
 }
