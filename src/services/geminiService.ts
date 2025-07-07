@@ -15,23 +15,30 @@ export async function getGeminiResponse(prompt: string): Promise<string> {
           {
             parts: [
               {
-                text: `Create a detailed, step-by-step visual explanation about: ${prompt}. 
+                text: `You are an expert instructor creating a step-by-step visual guide about: ${prompt}
 
-Structure your response in exactly 6-8 clear segments. Each segment should:
-1. Be 1-2 sentences maximum (under 120 characters each)
-2. Focus on a specific step, tool, or component that can be clearly illustrated
-3. Use concrete, specific terminology (mention exact tools, parts, actions)
-4. Be practical and actionable
-5. Include visual elements that can be photographed or illustrated
+Create a detailed, practical explanation with 8-10 clear steps. Each step should:
+1. Be conversational and natural (like talking to a friend)
+2. Be 1-2 sentences maximum (under 100 characters each)
+3. Focus on specific, visual actions that can be clearly shown in photos
+4. Use "as shown" or "you can see" instead of mentioning "image" directly
+5. Include specific tool names, part names, and exact actions
+6. Be practical and actionable for someone actually doing this task
 
-Make each segment focus on different visual aspects like tools, parts, steps, or techniques. Keep the explanation practical and visual.`
+Write in a friendly, helpful tone as if you're guiding someone through the process in person. Focus on what they would actually see and do at each step.
+
+Example format:
+"First, gather your basic tools as shown - you'll need a wrench set and screwdriver."
+"Next, locate the main component you can see here - it's usually near the center."
+
+Make each step focus on different visual elements like tools, parts, locations, or specific actions.`
               }
             ]
           }
         ],
         generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1000,
+          temperature: 0.8,
+          maxOutputTokens: 1200,
         },
       }),
     });
@@ -59,7 +66,8 @@ export function extractKeywordsFromSegments(segments: string[], originalPrompt: 
     'about', 'from', 'into', 'during', 'before', 'after', 'above', 'below', 'between', 'through',
     'also', 'then', 'now', 'first', 'second', 'third', 'important', 'process', 'system', 'way',
     'part', 'example', 'different', 'various', 'several', 'including', 'such', 'like', 'called',
-    'step', 'steps', 'make', 'sure', 'need', 'needs', 'use', 'using', 'used'
+    'step', 'steps', 'make', 'sure', 'need', 'needs', 'use', 'using', 'used', 'shown', 'see',
+    'can', 'you', 'your', 'here', 'as'
   ]);
 
   // Extract main topic from original prompt
@@ -84,32 +92,37 @@ export function extractKeywordsFromSegments(segments: string[], originalPrompt: 
       
       // Boost specific tools, parts, and actions
       if (isToolOrPart(word, mainTopic)) {
-        score += 15;
+        score += 20;
       }
       
       // Boost action words related to the topic
       if (isActionWord(word, mainTopic)) {
-        score += 12;
+        score += 15;
       }
       
       // Boost if word appears early in segment (more important)
       if (position < words.length * 0.4) {
-        score += 5;
+        score += 8;
       }
       
       // Boost technical terms related to main topic
       if (isTechnicalTerm(word, mainTopic)) {
-        score += 10;
+        score += 12;
       }
       
       // Boost visual/concrete nouns
       if (isVisualNoun(word)) {
-        score += 8;
+        score += 10;
+      }
+      
+      // Boost specific car parts for car-related queries
+      if (mainTopic === 'car' && isCarPart(word)) {
+        score += 18;
       }
       
       // Penalize very generic words
       if (isGenericWord(word)) {
-        score -= 5;
+        score -= 8;
       }
       
       wordScores.set(word, (wordScores.get(word) || 0) + score);
@@ -123,7 +136,7 @@ export function extractKeywordsFromSegments(segments: string[], originalPrompt: 
       const bestWord = sortedWords[0][0];
       
       // Create highly specific search term
-      return createSpecificSearchTerm(bestWord, segment, mainTopic, originalPrompt);
+      return createSpecificSearchTerm(bestWord, segment, mainTopic, originalPrompt, index);
     }
     
     // Fallback to main topic
@@ -136,8 +149,8 @@ function extractMainTopic(prompt: string): string {
   
   // Define topic mappings with their key components
   const topicMappings = {
+    'car': ['car', 'automobile', 'vehicle', 'engine', 'brake', 'tire', 'transmission', 'oil', 'battery', 'radiator'],
     'bike': ['bicycle', 'bike', 'cycling', 'wheel', 'chain', 'gear', 'brake', 'tire'],
-    'car': ['car', 'automobile', 'vehicle', 'engine', 'brake', 'tire', 'transmission'],
     'computer': ['computer', 'laptop', 'pc', 'hardware', 'software', 'motherboard', 'cpu'],
     'phone': ['phone', 'smartphone', 'mobile', 'screen', 'battery', 'charging'],
     'cooking': ['cook', 'recipe', 'kitchen', 'food', 'ingredient', 'pan', 'oven'],
@@ -167,10 +180,21 @@ function extractMainTopic(prompt: string): string {
   return meaningfulWord || 'repair';
 }
 
+function isCarPart(word: string): boolean {
+  const carParts = [
+    'engine', 'brake', 'tire', 'wheel', 'battery', 'alternator', 'radiator', 'transmission',
+    'clutch', 'spark', 'plug', 'filter', 'oil', 'coolant', 'belt', 'hose', 'pump',
+    'starter', 'ignition', 'exhaust', 'muffler', 'suspension', 'shock', 'strut',
+    'headlight', 'taillight', 'bumper', 'fender', 'hood', 'trunk', 'door',
+    'windshield', 'mirror', 'wiper', 'seat', 'steering', 'dashboard', 'gauge'
+  ];
+  return carParts.some(part => word.includes(part) || part.includes(word));
+}
+
 function isToolOrPart(word: string, mainTopic: string): boolean {
   const toolsAndParts = {
+    'car': ['wrench', 'socket', 'ratchet', 'screwdriver', 'pliers', 'jack', 'jackstand', 'funnel', 'drain', 'pan', 'filter', 'wrench', 'torque', 'multimeter', 'jumper', 'cables'],
     'bike': ['wrench', 'screwdriver', 'chain', 'wheel', 'tire', 'brake', 'gear', 'pedal', 'handlebar', 'seat', 'spoke', 'derailleur', 'cassette', 'crankset', 'tube', 'pump'],
-    'car': ['wrench', 'jack', 'tire', 'engine', 'brake', 'oil', 'filter', 'battery', 'alternator', 'radiator', 'transmission', 'clutch', 'spark', 'plug'],
     'computer': ['screwdriver', 'motherboard', 'cpu', 'ram', 'harddrive', 'graphics', 'card', 'power', 'supply', 'cable', 'monitor', 'keyboard', 'mouse'],
     'phone': ['screwdriver', 'screen', 'battery', 'charger', 'cable', 'speaker', 'microphone', 'camera', 'button', 'port'],
     'cooking': ['knife', 'pan', 'pot', 'oven', 'stove', 'spatula', 'whisk', 'bowl', 'cutting', 'board', 'ingredient'],
@@ -187,8 +211,8 @@ function isToolOrPart(word: string, mainTopic: string): boolean {
 
 function isActionWord(word: string, mainTopic: string): boolean {
   const actionWords = {
+    'car': ['change', 'replace', 'check', 'fill', 'drain', 'tighten', 'connect', 'disconnect', 'start', 'stop', 'remove', 'install', 'inspect', 'test'],
     'bike': ['adjust', 'tighten', 'loosen', 'replace', 'install', 'remove', 'clean', 'lubricate', 'inflate', 'align'],
-    'car': ['change', 'replace', 'check', 'fill', 'drain', 'tighten', 'connect', 'disconnect', 'start', 'stop'],
     'computer': ['install', 'connect', 'disconnect', 'update', 'restart', 'backup', 'format', 'scan'],
     'phone': ['charge', 'restart', 'update', 'backup', 'reset', 'connect', 'sync'],
     'cooking': ['chop', 'slice', 'mix', 'stir', 'bake', 'fry', 'boil', 'season', 'marinate'],
@@ -205,8 +229,8 @@ function isActionWord(word: string, mainTopic: string): boolean {
 
 function isTechnicalTerm(word: string, mainTopic: string): boolean {
   const technicalTerms = {
+    'car': ['carburetor', 'alternator', 'radiator', 'transmission', 'differential', 'catalytic', 'converter', 'thermostat', 'serpentine', 'timing'],
     'bike': ['derailleur', 'cassette', 'crankset', 'chainring', 'freewheel', 'headset', 'bottom', 'bracket'],
-    'car': ['carburetor', 'alternator', 'radiator', 'transmission', 'differential', 'catalytic', 'converter'],
     'computer': ['motherboard', 'processor', 'graphics', 'harddrive', 'memory', 'bios', 'firmware'],
     'phone': ['touchscreen', 'digitizer', 'motherboard', 'processor', 'antenna', 'sensor'],
     'cooking': ['sauté', 'braise', 'julienne', 'emulsify', 'caramelize', 'reduction'],
@@ -242,59 +266,96 @@ function isGenericWord(word: string): boolean {
   return genericWords.includes(word);
 }
 
-function createSpecificSearchTerm(mainKeyword: string, segment: string, mainTopic: string, originalPrompt: string): string {
+function createSpecificSearchTerm(mainKeyword: string, segment: string, mainTopic: string, originalPrompt: string, stepIndex: number): string {
   // Create highly specific search terms by combining relevant keywords
   const segmentWords = segment.toLowerCase().split(/\s+/);
   
   // Look for tools, parts, or actions in the segment
   const tools = segmentWords.filter(word => isToolOrPart(word, mainTopic));
   const actions = segmentWords.filter(word => isActionWord(word, mainTopic));
+  const carParts = segmentWords.filter(word => isCarPart(word));
   
-  // Build specific search term
-  let searchTerm = mainKeyword;
+  // Build specific search term based on step
+  let searchTerm = '';
   
-  // Add main topic for context
-  if (!searchTerm.includes(mainTopic)) {
-    searchTerm = `${mainTopic} ${searchTerm}`;
+  // For car repairs, create step-specific searches
+  if (mainTopic === 'car') {
+    const carStepMappings = [
+      'car repair tools garage',
+      'car jack lifting vehicle',
+      'car engine hood open',
+      'car oil drain pan underneath',
+      'car tire wheel removal',
+      'car battery jumper cables',
+      'car brake inspection',
+      'car filter replacement',
+      'car mechanic working',
+      'car maintenance completed'
+    ];
+    
+    if (stepIndex < carStepMappings.length) {
+      searchTerm = carStepMappings[stepIndex];
+    }
   }
   
-  // Add specific tool or action if found
-  if (tools.length > 0 && !searchTerm.includes(tools[0])) {
-    searchTerm = `${searchTerm} ${tools[0]}`;
-  } else if (actions.length > 0 && !searchTerm.includes(actions[0])) {
-    searchTerm = `${searchTerm} ${actions[0]}`;
-  }
-  
-  // Add repair/maintenance context if not present
-  if (!searchTerm.includes('repair') && !searchTerm.includes('fix') && !searchTerm.includes('maintenance')) {
-    if (originalPrompt.toLowerCase().includes('repair') || originalPrompt.toLowerCase().includes('fix')) {
-      searchTerm = `${searchTerm} repair`;
+  // If no step mapping, build dynamically
+  if (!searchTerm) {
+    searchTerm = mainKeyword;
+    
+    // Add main topic for context
+    if (!searchTerm.includes(mainTopic)) {
+      searchTerm = `${mainTopic} ${searchTerm}`;
+    }
+    
+    // Add specific car part if found
+    if (carParts.length > 0 && !searchTerm.includes(carParts[0])) {
+      searchTerm = `${searchTerm} ${carParts[0]}`;
+    }
+    
+    // Add specific tool or action if found
+    if (tools.length > 0 && !searchTerm.includes(tools[0])) {
+      searchTerm = `${searchTerm} ${tools[0]}`;
+    } else if (actions.length > 0 && !searchTerm.includes(actions[0])) {
+      searchTerm = `${searchTerm} ${actions[0]}`;
+    }
+    
+    // Add repair/maintenance context if not present
+    if (!searchTerm.includes('repair') && !searchTerm.includes('fix') && !searchTerm.includes('maintenance')) {
+      if (originalPrompt.toLowerCase().includes('repair') || originalPrompt.toLowerCase().includes('fix')) {
+        searchTerm = `${searchTerm} repair`;
+      }
     }
   }
   
   return searchTerm.trim();
 }
 
-export function splitTextIntoSegments(text: string, targetSegments: number = 7): string[] {
+export function splitTextIntoSegments(text: string, targetSegments: number = 8): string[] {
+  // Remove any markdown formatting and asterisks
+  let cleanText = text.replace(/\*\*([^*]+)\*\*/g, '$1'); // Remove **bold**
+  cleanText = cleanText.replace(/\*([^*]+)\*/g, '$1'); // Remove *italic*
+  cleanText = cleanText.replace(/\*+/g, ''); // Remove any remaining asterisks
+  cleanText = cleanText.replace(/#+\s*/g, ''); // Remove markdown headers
+  
   // First try to split by clear paragraph breaks or numbered steps
-  let segments = text.split(/\n\s*\n/).filter(s => s.trim().length > 15);
+  let segments = cleanText.split(/\n\s*\n/).filter(s => s.trim().length > 15);
   
   // Try splitting by numbered points or bullet points
   if (segments.length < targetSegments) {
-    const numberedSections = text.split(/(?:\d+\.|•|\*|-)\s+/).filter(s => s.trim().length > 15);
+    const numberedSections = cleanText.split(/(?:\d+\.|•|\*|-)\s+/).filter(s => s.trim().length > 15);
     if (numberedSections.length >= targetSegments) {
       segments = numberedSections;
     }
   }
   
-  // Split by sentences but group them intelligently for 10-second timing
+  // Split by sentences but group them intelligently
   if (segments.length < targetSegments) {
-    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+    const sentences = cleanText.split(/[.!?]+/).filter(s => s.trim().length > 10);
     
     if (sentences.length <= targetSegments) {
       segments = sentences.map(s => s.trim() + '.');
     } else {
-      // Group sentences into logical segments for 10-second slideshow
+      // Group sentences into logical segments
       const segmentSize = Math.ceil(sentences.length / targetSegments);
       segments = [];
       
@@ -320,14 +381,22 @@ export function splitTextIntoSegments(text: string, targetSegments: number = 7):
     segments = newSegments;
   }
 
-  // Ensure segments are concise for 10-second timing (max 120 characters)
+  // Clean up segments and ensure they're concise
   segments = segments.map(segment => {
-    if (segment.length > 120) {
-      const words = segment.split(' ');
-      const truncated = words.slice(0, 18).join(' ');
-      return truncated + (truncated.endsWith('.') ? '' : '.');
+    // Remove any remaining asterisks or markdown
+    let cleanSegment = segment.replace(/\*+/g, '').trim();
+    
+    // Ensure proper capitalization
+    cleanSegment = cleanSegment.charAt(0).toUpperCase() + cleanSegment.slice(1);
+    
+    // Keep segments concise (max 100 characters for better narration)
+    if (cleanSegment.length > 100) {
+      const words = cleanSegment.split(' ');
+      const truncated = words.slice(0, 15).join(' ');
+      cleanSegment = truncated + (truncated.endsWith('.') ? '' : '.');
     }
-    return segment;
+    
+    return cleanSegment;
   });
 
   return segments.filter(s => s.trim().length > 5).slice(0, targetSegments);
