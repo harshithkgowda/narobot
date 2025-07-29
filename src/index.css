@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 * {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -10,7 +10,7 @@
 
 /* Base styles */
 :root {
-  --animation-duration: 0.2s;
+  --animation-duration: 0.3s;
   --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -18,6 +18,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background: linear-gradient(135deg, #064e3b, #065f46, #0f766e);
 }
 
 /* Smooth transitions */
@@ -35,27 +36,19 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(16, 185, 129, 0.3);
   border-radius: 3px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-}
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(16, 185, 129, 0.5);
 }
 
 /* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -66,7 +59,7 @@ body {
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateX(-10px);
+    transform: translateX(-20px);
   }
   to {
     opacity: 1;
@@ -74,383 +67,374 @@ body {
   }
 }
 
-@keyframes thinking {
-  0%, 60%, 100% {
-    transform: translateY(0);
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
   }
-  30% {
-    transform: translateY(-4px);
+  50% {
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+  }
+}
+
+@keyframes voice-wave {
+  0%, 100% {
+    height: 1rem;
+  }
+  50% {
+    height: 2rem;
   }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.6s ease-out;
 }
 
 .animate-slide-in {
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.4s ease-out;
 }
 
-/* Sidebar */
-.sidebar-container {
-  flex-shrink: 0;
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
-.nav-item {
-  @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200;
-  @apply text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700;
+.voice-wave {
+  animation: voice-wave 1s ease-in-out infinite;
 }
 
-.nav-item.active {
-  @apply bg-gray-100 dark:bg-gray-700 text-black dark:text-white font-medium;
-  @apply border border-gray-200 dark:border-gray-600;
+.voice-wave:nth-child(2) {
+  animation-delay: 0.1s;
 }
 
-.conversation-item {
-  @apply p-3 rounded-lg cursor-pointer transition-all duration-200;
-  @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+.voice-wave:nth-child(3) {
+  animation-delay: 0.2s;
 }
 
-/* Header */
-.header-bar {
-  @apply px-4 py-3 border-b border-gray-200 dark:border-gray-700;
-  @apply bg-white dark:bg-gray-900/80 backdrop-blur-sm;
+.voice-wave:nth-child(4) {
+  animation-delay: 0.3s;
 }
 
-.icon-button {
-  @apply p-2 rounded-lg transition-all duration-200;
-  @apply hover:bg-gray-100 dark:hover:bg-gray-800;
-  @apply text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white;
+/* Glass morphism effects */
+.glass {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* Messages */
-.message-container {
-  @apply mb-6 animate-fade-in;
+.glass-strong {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-.message {
-  @apply flex gap-4 max-w-none;
+/* Button hover effects */
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-2px);
 }
 
-.message-user {
-  @apply flex-row-reverse;
+/* Message animations */
+.message-enter {
+  animation: slideIn 0.5s ease-out;
 }
 
-.message-assistant {
-  @apply flex-row;
+/* Voice circle animations */
+.voice-circle {
+  position: relative;
 }
 
-.message-avatar {
-  @apply flex-shrink-0;
+.voice-circle::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgba(16, 185, 129, 0.3), transparent);
+  animation: spin 3s linear infinite;
+  z-index: -1;
 }
 
-.message-content {
-  @apply flex-1 min-w-0;
+.voice-circle::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+  animation: pulse 2s ease-in-out infinite;
+  z-index: -1;
 }
 
-.message-header {
-  @apply flex items-center gap-2 mb-2;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.message-time {
-  @apply text-xs text-gray-500 dark:text-gray-400;
+/* Enhanced glow effects */
+.glow-emerald {
+  box-shadow: 
+    0 0 20px rgba(16, 185, 129, 0.3),
+    0 0 40px rgba(16, 185, 129, 0.2),
+    0 0 60px rgba(16, 185, 129, 0.1);
 }
 
-.message-text {
-  @apply text-gray-900 dark:text-white leading-relaxed;
+.glow-emerald-strong {
+  box-shadow: 
+    0 0 30px rgba(16, 185, 129, 0.5),
+    0 0 60px rgba(16, 185, 129, 0.3),
+    0 0 90px rgba(16, 185, 129, 0.2);
 }
 
-.message-user .message-text {
-  @apply bg-black dark:bg-white text-white dark:text-black px-4 py-3 rounded-2xl rounded-tr-md inline-block max-w-fit ml-auto shadow-lg;
-}
-
-.message-actions {
-  @apply flex items-center gap-1 mt-3 opacity-0 group-hover:opacity-100 transition-opacity;
-}
-
-.action-button {
-  @apply p-1.5 rounded-lg transition-all duration-200;
-  @apply hover:bg-gray-100 dark:hover:bg-gray-800;
-  @apply text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-300;
-}
-
-/* Thinking indicator */
-.thinking-indicator {
-  @apply flex items-center gap-2 text-gray-600 dark:text-gray-400;
-}
-
-.thinking-dots {
-  @apply flex gap-1;
-}
-
-.thinking-dot {
-  @apply w-1 h-1 bg-gray-500 dark:bg-gray-500 rounded-full;
-  animation: thinking 1.4s infinite ease-in-out;
-}
-
-.thinking-dot:nth-child(1) { animation-delay: -0.32s; }
-.thinking-dot:nth-child(2) { animation-delay: -0.16s; }
-.thinking-dot:nth-child(3) { animation-delay: 0s; }
-
-/* Input */
-.input-container {
-  @apply border-t border-gray-200 dark:border-gray-700;
-  @apply bg-white dark:bg-gray-900/80 backdrop-blur-sm;
-}
-
-.input-wrapper {
-  @apply relative flex items-center;
-  @apply bg-gray-50 dark:bg-gray-800 rounded-2xl;
-  @apply border border-gray-200 dark:border-gray-700;
-  @apply focus-within:border-gray-400 dark:focus-within:border-white;
-  @apply transition-all duration-200;
-}
-
-.input-attachment-button {
-  @apply p-3 text-gray-500 dark:text-gray-400;
-  @apply hover:text-gray-700 dark:hover:text-gray-300;
-  @apply transition-colors duration-200;
-}
-
-.chat-input {
-  @apply flex-1 bg-transparent border-none outline-none;
-  @apply px-2 py-3 text-gray-900 dark:text-white;
-  @apply placeholder-gray-500 dark:placeholder-gray-400;
-  @apply resize-none;
-}
-
-.input-actions {
-  @apply flex items-center gap-1 pr-2;
-}
-
-.input-action-button {
-  @apply p-2 rounded-lg transition-all duration-200;
-  @apply text-gray-500 dark:text-gray-400;
-  @apply hover:text-gray-700 dark:hover:text-gray-300;
-  @apply hover:bg-gray-100 dark:hover:bg-gray-700;
-}
-
-.send-button {
-  @apply p-2 rounded-lg transition-all duration-200;
-  @apply bg-black dark:bg-white text-white dark:text-black;
-  @apply hover:bg-gray-800 dark:hover:bg-gray-200;
-  @apply disabled:opacity-50 disabled:cursor-not-allowed;
-  @apply hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl;
-}
-
-.input-footer {
-  @apply text-center mt-2;
-}
-
-/* Suggestion cards */
-.suggestion-card {
-  @apply p-4 rounded-xl border border-gray-200 dark:border-gray-700;
-  @apply bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700;
-  @apply transition-all duration-200 hover:scale-[1.02] hover:shadow-lg;
-  @apply text-left;
-}
-
-/* Slideshow enhancements */
+/* Slideshow container with green theme */
 .slideshow-container {
-  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700;
-  @apply rounded-xl overflow-hidden shadow-lg;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .slide-progress {
-  @apply bg-gray-200 dark:bg-gray-700 h-1;
+  background: rgba(16, 185, 129, 0.2);
+  height: 4px;
 }
 
 .slide-progress-fill {
-  @apply bg-black dark:bg-white h-full transition-all duration-300;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  height: 100%;
+  transition: width 0.3s ease;
 }
 
+/* Keyword tags with green theme */
 .keyword-tag {
-  @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300;
-  @apply border border-gray-200 dark:border-gray-600;
-  @apply px-3 py-1 rounded-full text-xs font-medium;
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-/* Responsive design */
+/* Mobile responsive */
 @media (max-width: 768px) {
-  .sidebar-container {
-    @apply fixed inset-y-0 left-0 z-50;
-    @apply transform -translate-x-full;
+  .voice-circle {
+    width: 120px;
+    height: 120px;
   }
   
-  .sidebar-container.open {
-    @apply translate-x-0;
+  .message-container {
+    padding: 1rem;
   }
   
-  .message {
-    @apply gap-3;
-  }
-  
-  .message-content {
-    @apply text-sm;
+  .glass {
+    backdrop-filter: blur(8px);
   }
 }
 
 /* Focus states */
-.chat-input:focus {
-  @apply outline-none;
-}
-
-.input-wrapper:focus-within {
-  @apply ring-2 ring-gray-300 dark:ring-white/20;
-}
-
-/* Hover effects */
-.nav-item:hover {
-  @apply transform translate-x-1;
-}
-
-.conversation-item:hover {
-  @apply transform translate-x-1;
-}
-
-.action-button:hover {
-  @apply transform scale-110;
+input:focus {
+  outline: none;
+  border-color: rgba(16, 185, 129, 0.6);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 /* Loading states */
-.send-button:disabled {
-  @apply transform scale-100;
+.loading-dots {
+  display: flex;
+  gap: 0.25rem;
 }
 
-/* Message grouping */
-.message + .message {
-  @apply mt-6;
+.loading-dot {
+  width: 0.25rem;
+  height: 0.25rem;
+  background: #10b981;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
 }
 
-/* Professional spacing */
-.message-container:last-child {
-  @apply mb-8;
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
 }
 
-/* Light mode specific improvements */
-.suggestion-card:hover {
-  @apply shadow-lg;
+/* Enhanced button styles */
+.btn-primary {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
-/* Button hover states for light mode */
-.icon-button:hover {
-  @apply bg-gray-100 dark:bg-gray-800;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
 }
 
-/* Enhanced contrast for light mode */
-.nav-item {
-  @apply text-gray-700 dark:text-gray-300;
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-.nav-item:hover {
-  @apply text-black dark:text-white bg-gray-100 dark:bg-gray-700;
+/* Navigation tab styles */
+.nav-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-/* Better visual hierarchy */
-.message-header span:first-child {
-  @apply text-gray-900 dark:text-white font-medium;
+.nav-tab.active {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
-/* Improved borders and shadows */
-.slideshow-container {
-  @apply shadow-xl dark:shadow-gray-900/20;
+.nav-tab:not(.active) {
+  color: #a7f3d0;
 }
 
-.input-wrapper {
-  @apply shadow-sm;
+.nav-tab:not(.active):hover {
+  color: white;
+  background: rgba(16, 185, 129, 0.2);
 }
 
-.suggestion-card {
-  @apply shadow-sm hover:shadow-lg;
+/* Message bubble styles */
+.message-bubble {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  border-top-right-radius: 0.25rem;
+  max-width: fit-content;
+  margin-left: auto;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
-/* Light mode specific overrides */
-body:not(.dark) {
-  background-color: #ffffff;
+/* Avatar styles */
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-body:not(.dark) .sidebar-container > div {
-  @apply bg-white border-gray-200;
+.avatar-user {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
 }
 
-body:not(.dark) .header-bar {
-  @apply bg-white border-gray-200;
+.avatar-bot {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
-body:not(.dark) .input-container {
-  @apply bg-white border-gray-200;
+/* Action button styles */
+.action-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  color: #a7f3d0;
+  cursor: pointer;
 }
 
-/* Welcome section styling for light mode */
-body:not(.dark) .text-center h2 {
-  @apply text-gray-900;
+.action-btn:hover {
+  color: white;
+  background: rgba(16, 185, 129, 0.2);
+  transform: scale(1.1);
 }
 
-body:not(.dark) .text-center p {
-  @apply text-gray-600;
+/* Thinking indicator */
+.thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #a7f3d0;
 }
 
-/* Ensure proper text colors in light mode */
-body:not(.dark) .nav-item {
-  @apply text-gray-700;
+/* Enhanced animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-body:not(.dark) .nav-item.active {
-  @apply text-black bg-gray-100 border-gray-200;
+.float-animation {
+  animation: float 3s ease-in-out infinite;
 }
 
-body:not(.dark) .conversation-item {
-  @apply text-gray-700;
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #10b981, #34d399, #6ee7b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-body:not(.dark) .conversation-item h4 {
-  @apply text-black;
+/* Enhanced backdrop blur */
+.backdrop-blur-strong {
+  backdrop-filter: blur(20px) saturate(180%);
 }
 
-body:not(.dark) .conversation-item p {
-  @apply text-gray-500;
+/* Improved glass morphism */
+.glass-panel {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Input styling for light mode */
-body:not(.dark) .input-wrapper {
-  @apply bg-gray-50 border-gray-200;
+/* Voice visualization */
+.voice-bars {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  height: 1.5rem;
 }
 
-body:not(.dark) .chat-input {
-  @apply text-gray-900 placeholder-gray-500;
+.voice-bar {
+  width: 0.125rem;
+  background: white;
+  border-radius: 0.0625rem;
+  animation: voice-wave 1s ease-in-out infinite;
 }
 
-body:not(.dark) .input-attachment-button {
-  @apply text-gray-500;
-}
-
-body:not(.dark) .input-action-button {
-  @apply text-gray-500;
-}
-
-/* Message styling for light mode */
-body:not(.dark) .message-text {
-  @apply text-gray-900;
-}
-
-body:not(.dark) .message-header span:first-child {
-  @apply text-gray-900;
-}
-
-body:not(.dark) .message-time {
-  @apply text-gray-500;
-}
-
-body:not(.dark) .thinking-indicator {
-  @apply text-gray-600;
-}
-
-/* Icon button styling for light mode */
-body:not(.dark) .icon-button {
-  @apply text-gray-600 hover:text-black hover:bg-gray-100;
-}
-
-/* Action button styling for light mode */
-body:not(.dark) .action-button {
-  @apply text-gray-500 hover:text-black hover:bg-gray-100;
+/* Responsive design improvements */
+@media (max-width: 640px) {
+  .nav-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .message-bubble {
+    max-width: 85%;
+  }
+  
+  .glass-panel {
+    backdrop-filter: blur(10px);
+  }
 }
