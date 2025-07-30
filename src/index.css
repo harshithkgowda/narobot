@@ -10,6 +10,11 @@
 
 /* Base styles */
 :root {
+  --color-primary: #3b82f6;
+  --color-secondary: #1e40af;
+  --color-accent: #06b6d4;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
   --animation-duration: 0.3s;
   --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -464,20 +469,10 @@ input:focus {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal animations */
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.modal-content {
-  animation: modalSlideIn 0.3s ease-out;
+/* Apply dark mode */
+.dark,
+html.dark {
+  color-scheme: dark;
 }
 
 /* Enhanced focus states */
@@ -503,4 +498,53 @@ input:focus {
 
 .modal-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(59, 130, 246, 0.7);
+}
+
+/* Theme-aware styles */
+.theme-primary {
+  background-color: var(--color-primary);
+}
+
+.theme-secondary {
+  background-color: var(--color-secondary);
+}
+
+.theme-accent {
+  background-color: var(--color-accent);
+}
+
+.theme-background {
+  background-color: var(--color-background);
+}
+
+.theme-surface {
+  background-color: var(--color-surface);
+}
+
+.theme-text-primary {
+  color: var(--color-primary);
+}
+
+.theme-border-primary {
+  border-color: var(--color-primary);
+}
+
+.theme-ring-primary:focus {
+  ring-color: var(--color-primary);
+}
+
+/* Modal animations */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-content {
+  animation: modalSlideIn 0.3s ease-out;
 }
